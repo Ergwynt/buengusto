@@ -67,6 +67,7 @@ $.getJSON('./productos.json', function (data) {
 
                     // Asignar el evento clic al botón recién creado
                     botonCategoria.click(function() {
+                        //Vaciar la lista de productos
                         $('.product-list').empty();
                         console.log('Productos en la categoría:', categoria);
                         data[categoria].forEach(function (producto) {
