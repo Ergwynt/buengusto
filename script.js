@@ -6,7 +6,8 @@ $.getJSON('./productos.json', function (data) {
 
         // Verifico si la categoría seleccionada es "bebidas"
         if (categoriaSeleccionada === "bebidas") {
-
+            $('.sub-menu').empty()
+            $('.product-list').empty();
             var categoriasBebidas = ["Calientes", "Refrescos", "Alcohólicas"];
 
             // Iterar sobre cada categoría de bebidas
@@ -19,6 +20,7 @@ $.getJSON('./productos.json', function (data) {
 
                     // Asignar el evento clic al botón recién creado
                     botonCategoria.click(function() {
+                        $('.product-list').empty();
                         console.log('Productos en la categoría:', categoria);
                         data[categoria].forEach(function (producto) {
                             $('.product-list').append('<li>'+producto.nombre+'</li>')
@@ -28,47 +30,71 @@ $.getJSON('./productos.json', function (data) {
             });
         }
         else if (categoriaSeleccionada === "primer-plato") {
-
+            $('.sub-menu').empty()
+            $('.product-list').empty();
             var categoriasBebidas = ["Ensalada", "Sopa",];
 
             // Iterar sobre cada categoría de bebidas
             categoriasBebidas.forEach(function (categoria) {
 
                 if (data[categoria]) {
-                    $('.sub-menu').html('<button></button>')
-                    console.warn(categoria);
-                    data[categoria].forEach(function (producto) {
-                        console.log('Producto:', producto.nombre);
+                    // Crear un botón para cada categoría
+                    var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
+                    $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
+
+                    // Asignar el evento clic al botón recién creado
+                    botonCategoria.click(function() {
+                        $('.product-list').empty();
+                        console.log('Productos en la categoría:', categoria);
+                        data[categoria].forEach(function (producto) {
+                            $('.product-list').append('<li>'+producto.nombre+'</li>')
+                        });
                     });
                 }
             });
         } else if (categoriaSeleccionada === "segundo-plato") {
-
+            $('.sub-menu').empty()
+            $('.product-list').empty();
             var categoriasBebidas = ["Carne", "Pescado", "Vegetariano"];
 
             // Iterar sobre cada categoría de bebidas
             categoriasBebidas.forEach(function (categoria) {
 
                 if (data[categoria]) {
-                    $('.sub-menu').html('<button></button>')
-                    console.warn(categoria);
-                    data[categoria].forEach(function (producto) {
-                        console.log('Producto:', producto.nombre);
+                    // Crear un botón para cada categoría
+                    var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
+                    $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
+
+                    // Asignar el evento clic al botón recién creado
+                    botonCategoria.click(function() {
+                        $('.product-list').empty();
+                        console.log('Productos en la categoría:', categoria);
+                        data[categoria].forEach(function (producto) {
+                            $('.product-list').append('<li>'+producto.nombre+'</li>')
+                        });
                     });
                 }
             });
         } else if (categoriaSeleccionada === "postres") {
-
+            $('.sub-menu').empty()
+            $('.product-list').empty();
             var categoriasBebidas = ["Frutas", "Dulces",];
 
             // Iterar sobre cada categoría de bebidas
             categoriasBebidas.forEach(function (categoria) {
 
                 if (data[categoria]) {
-                    $('.sub-menu').html('<button></button>')
-                    console.warn(categoria);
-                    data[categoria].forEach(function (producto) {
-                        console.log('Producto:', producto.nombre);
+                    // Crear un botón para cada categoría
+                    var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
+                    $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
+
+                    // Asignar el evento clic al botón recién creado
+                    botonCategoria.click(function() {
+                        $('.product-list').empty();
+                        console.log('Productos en la categoría:', categoria);
+                        data[categoria].forEach(function (producto) {
+                            $('.product-list').append('<li>'+producto.nombre+'</li>')
+                        });
                     });
                 }
             });
