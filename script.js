@@ -1,107 +1,96 @@
-$.getJSON('./productos.json', function (data) {
-    $('.menu-btn').click(function () {
+$(document).ready(function() {
+    $.getJSON('./productos.json', function (data) {
+        $('.menu-btn').click(function () {
+            var categoriaSeleccionada = $(this).data('category');
+            console.warn('Categoría seleccionada:', categoriaSeleccionada);
 
-        var categoriaSeleccionada = $(this).data('category');
-        console.warn('Categoría seleccionada:', categoriaSeleccionada);
+            // Mapeo de categorías y sus subcategorías
+            var categoriasMap = {
+                "bebidas": ["Calientes", "Refrescos", "Alcohólicas"],
+                "primer-plato": ["Ensalada", "Sopa"],
+                "segundo-plato": ["Carne", "Pescado", "Vegetariano"],
+                "postres": ["Frutas", "Dulces"]
+            };
 
-        // Verifico si la categoría seleccionada es "bebidas"
-        if (categoriaSeleccionada === "bebidas") {
-            $('.sub-menu').empty()
-            $('.product-list').empty();
-            var categoriasBebidas = ["Calientes", "Refrescos", "Alcohólicas"];
+            // Verifico si la categoría seleccionada está en el mapa
+            if (categoriasMap[categoriaSeleccionada]) {
+                $('.sub-menu').empty();
+                $('.product-list').empty();
 
-            // Iterar sobre cada categoría de bebidas
-            categoriasBebidas.forEach(function (categoria) {
-                
-                if (data[categoria]) {
-                    // Crear un botón para cada categoría
-                    var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
-                    $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
+                // Iterar sobre cada categoría de la categoría seleccionada
+                categoriasMap[categoriaSeleccionada].forEach(function (categoria) {
+                    if (data[categoria]) {
+                        // Crear un botón para cada categoría
+                        var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
+                        $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
 
-                    // Asignar el evento clic al botón recién creado
-                    botonCategoria.click(function() {
-                        $('.product-list').empty();
-                        console.log('Productos en la categoría:', categoria);
-                        data[categoria].forEach(function (producto) {
-                            $('.product-list').append('<li>'+producto.nombre+'</li>')
+                        // Asignar el evento clic al botón recién creado
+                        botonCategoria.click(function() {
+                            $('.product-list').empty();
+                            console.log('Productos en la categoría:', categoria);
+                            data[categoria].forEach(function (producto) {
+                                // Crear contenedor para cada producto
+                                var productoContenedor = $('<div class="producto"></div>');
+                                var nombreProducto = $('<span>' + producto.nombre + '</span>');
+
+                                // Crear botones de Más y Menos
+                                var botonMenos = $('<button>-</button>').addClass('boton-menos');
+                                var botonMas = $('<button>+</button>').addClass('boton-mas');
+                                var contador = $('<span class="contador">0</span>');
+
+                                // Almacenamos el nombre del producto en un atributo data
+                                productoContenedor.data('producto', producto.nombre);
+
+                                // Añadir evento para el botón Menos
+                                botonMenos.click(function() {
+                                    var count = parseInt(contador.text());
+                                    if (count > 0) {
+                                        contador.text(count - 1);
+                                    }
+                                });
+
+                                // Añadir evento para el botón Más
+                                botonMas.click(function() {
+                                    var count = parseInt(contador.text());
+                                    contador.text(count + 1);
+                                });
+
+                                // Añadir todos los elementos al contenedor del producto
+                                productoContenedor.append(nombreProducto, botonMenos, contador, botonMas);
+                                $('.product-list').append(productoContenedor);
+                            });
                         });
-                    });
+                    }
+                });
+            }
+        });
+
+        
+        $('#enviarComanda').click(function () {
+            // Obtener los productos seleccionados
+            var productosSeleccionados = [];
+            $('.producto').each(function () {
+                var nombreProducto = $(this).data('producto');
+                var cantidad = parseInt($(this).find('.contador').text());
+                if (cantidad > 0) {
+                    productosSeleccionados.push(nombreProducto + ' (Cantidad: ' + cantidad + ')');
                 }
             });
-        }
-        else if (categoriaSeleccionada === "primer-plato") {
-            $('.sub-menu').empty()
-            $('.product-list').empty();
-            var categoriasBebidas = ["Ensalada", "Sopa",];
 
-            // Iterar sobre cada categoría de bebidas
-            categoriasBebidas.forEach(function (categoria) {
+            $('#productos-seleccionados').empty();
+            if (productosSeleccionados.length > 0) {
+                productosSeleccionados.forEach(function (producto) {
+                    $('#productos-seleccionados').append('<li>' + producto + '</li>');
+                });
+            } else {
+                $('#productos-seleccionados').append('<li>No se seleccionaron productos.</li>');
+            }
 
-                if (data[categoria]) {
-                    // Crear un botón para cada categoría
-                    var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
-                    $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
-
-                    // Asignar el evento clic al botón recién creado
-                    botonCategoria.click(function() {
-                        $('.product-list').empty();
-                        console.log('Productos en la categoría:', categoria);
-                        data[categoria].forEach(function (producto) {
-                            $('.product-list').append('<li>'+producto.nombre+'</li>')
-                        });
-                    });
-                }
-            });
-        } else if (categoriaSeleccionada === "segundo-plato") {
-            $('.sub-menu').empty()
-            $('.product-list').empty();
-            var categoriasBebidas = ["Carne", "Pescado", "Vegetariano"];
-
-            // Iterar sobre cada categoría de bebidas
-            categoriasBebidas.forEach(function (categoria) {
-
-                if (data[categoria]) {
-                    // Crear un botón para cada categoría
-                    var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
-                    $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
-
-                    // Asignar el evento clic al botón recién creado
-                    botonCategoria.click(function() {
-                        //Vaciar la lista de productos
-                        $('.product-list').empty();
-                        console.log('Productos en la categoría:', categoria);
-                        data[categoria].forEach(function (producto) {
-                            $('.product-list').append('<li>'+producto.nombre+'</li>')
-                        });
-                    });
-                }
-            });
-        } else if (categoriaSeleccionada === "postres") {
-            $('.sub-menu').empty()
-            $('.product-list').empty();
-            var categoriasBebidas = ["Frutas", "Dulces",];
-
-            // Iterar sobre cada categoría de bebidas
-            categoriasBebidas.forEach(function (categoria) {
-
-                if (data[categoria]) {
-                    // Crear un botón para cada categoría
-                    var botonCategoria = $('<button>' + categoria + '</button>').addClass('boton-categoria');
-                    $('.sub-menu').append(botonCategoria); // Agregar el botón al submenú
-
-                    // Asignar el evento clic al botón recién creado
-                    botonCategoria.click(function() {
-                        $('.product-list').empty();
-                        console.log('Productos en la categoría:', categoria);
-                        data[categoria].forEach(function (producto) {
-                            $('.product-list').append('<li>'+producto.nombre+'</li>')
-                        });
-                    });
-                }
-            });
-        }
-
+            $('#mensaje-confirmacion').show();
+        });
     });
 });
+
+
 
 
