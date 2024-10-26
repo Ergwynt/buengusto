@@ -29,19 +29,16 @@ $(document).ready(function() {
                             $('.product-list').empty();
                             console.log('Productos en la categoría:', categoria);
                             data[categoria].forEach(function (producto) {
-                                // Crear contenedor para cada producto
-                                var productoContenedor = $('<div class="producto"></div>');
+
+                                var productoContenedor = $('<div class="producto"></div>').addClass('productoContenedor');
                                 var nombreProducto = $('<span>' + producto.nombre + '</span>');
 
-                                // Crear botones de Más y Menos
                                 var botonMenos = $('<button>-</button>').addClass('boton-menos');
                                 var botonMas = $('<button>+</button>').addClass('boton-mas');
                                 var contador = $('<span class="contador">0</span>');
 
-                                // Almacenamos el nombre del producto en un atributo data
                                 productoContenedor.data('producto', producto.nombre);
-
-                                // Añadir evento para el botón Menos
+                                
                                 botonMenos.click(function() {
                                     var count = parseInt(contador.text());
                                     if (count > 0) {
@@ -49,13 +46,11 @@ $(document).ready(function() {
                                     }
                                 });
 
-                                // Añadir evento para el botón Más
                                 botonMas.click(function() {
                                     var count = parseInt(contador.text());
                                     contador.text(count + 1);
                                 });
 
-                                // Añadir todos los elementos al contenedor del producto
                                 productoContenedor.append(nombreProducto, botonMenos, contador, botonMas);
                                 $('.product-list').append(productoContenedor);
                             });
